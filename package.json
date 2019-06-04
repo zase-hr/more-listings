@@ -1,13 +1,13 @@
 {
-  "name": "inprogress",
-  "version": "1.0.0",
-  "description": "",
+  "name": "more-listings",
+  "version": "2.0.0",
+  "description": "Additional listings for interested houseguests",
   "main": "index.js",
   "scripts": {
     "start": "nodemon server/server.js",
     "react-dev": "webpack -d --watch",
     "test": "jest --detectOpenHandles --coverage",
-    "seed": "node server/createData.js",
+    "seed": "node database/seed.js",
     "updateTestSnapshot": "jest --updateSnapshot"
   },
   "author": "",
@@ -16,7 +16,6 @@
     "axios": "^0.18.0",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
-    "eslint-config-babel": "^9.0.0",
     "express": "^4.16.4",
     "faker": "^4.1.0",
     "mysql": "^2.17.1",
@@ -41,6 +40,7 @@
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-babel": "^9.0.0",
     "eslint-plugin-react": "^7.13.0",
     "exit": "^0.1.2",
     "husky": "^2.3.0",

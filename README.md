@@ -8,9 +8,6 @@ some basic information, viewed on a carousel.
 - `npm install`
 
 ### Development
-Create a dbconfig file
-- Copy dockerDbConfig.js to /db/dbconfig.js
-- Alter the host, user, and password to reflect your own
 Bundle the client source
 - `npm run react-dev`
 Start the server
@@ -22,10 +19,13 @@ Start the server
 - `docker-compose up`
 
 ### Seeding the Database
-- This service uses MySQL
+**MySQL**
 Create a database on your host
 - mysql -u root -p < schema.sql
-Seed it
+Create a dbconfig file
+- Copy dockerDbConfig.js to /db/dbconfig.js
+- Alter the host, user, and password to reflect your own
+Seed the database
 - npm run seed
 
 ## API

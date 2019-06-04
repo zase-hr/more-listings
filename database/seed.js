@@ -2,10 +2,10 @@
 const faker = require('faker');
 const img = require('./images.js');
 // const img = require('./localimg.js');
-const dbModels = require('../db/models.js');
-const dbConnection = require('../db/conn.js');
+const db = require('./models.js');
+const dbConnection = require('./conn.js');
 
-function create() {
+function createListingData() {
   const result = [];
   const houseType = ['ENTIRE HOUSE', 'ENTIRE APARTMENT', 'PRIVATE ROOM', 'SHARED ROOM'];
   const description = ['Cozy house in friendly neiborhood', 'Spacious apartment', 'Sunny, Modern room', 'Penthouse Studio', 'Perfect Weekender'];
@@ -27,8 +27,9 @@ function create() {
   return result;
 }
 
-const data = create();
-dbModels.addHouse(dbConnection, data, (err) => {
+const data = createListingData();
+
+db.addManyListings(dbConnection, data, (err) => {
   if (err) {
     console.log(err);
   } else {
