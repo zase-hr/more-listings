@@ -87,6 +87,7 @@ TABLE listings (
 &nbsp;&nbsp;img               VARCHAR(250),  
 &nbsp;&nbsp;house_type        VARCHAR(25),  
 &nbsp;&nbsp;location          VARCHAR(100),  
+&nbsp;&nbsp;coordinates       TUPLE(numeric, numeric),
 &nbsp;&nbsp;description       VARCHAR(100),  
 &nbsp;&nbsp;cost_per_night    INT NOT NULL,  
 &nbsp;&nbsp;rating            DECIMAL(5,2),  
