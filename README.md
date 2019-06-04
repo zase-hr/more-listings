@@ -30,8 +30,8 @@ Seed the database
 
 ## API
 
-GET `/MoreHomes`
-- Successful requests to this route will return an array of objects 
+GET `/RandomListings`
+- Successful requests to this route will return an array of 25 objects 
 with the following structure:
 ```
 {
@@ -46,3 +46,15 @@ with the following structure:
 }
 ```
 
+POST `/Listing`
+- This route expects an object with the following structure:
+{
+  "img": **_string_**,
+  "house_type": **_string_**,
+  "location": **_string_**,
+  "description": **_string_**,
+  "cost_per_night": **_integer_**,
+  "rating": **_numeric_**,
+  "votes": **_integer_**
+}
+- If successful, will return a RowDataPacket

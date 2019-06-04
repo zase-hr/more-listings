@@ -21,6 +21,17 @@ const createServer = (dbConnection) => {
     });
   });
 
+  // Add One Listing
+  app.post('/Listing', (req, res) => {
+    db.addOneListing(dbConnection, req.body, (err, result) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.status(200).send(result);
+      }
+    });
+  });
+
   // Get One Listing
   app.get('/Listing/:id', (req, res) => {
     db.getOneListing(dbConnection, req.params.id, (err, result) => {
