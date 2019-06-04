@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS more_homes;
-CREATE DATABASE more_homes;
-USE more_homes;
+DROP DATABASE IF EXISTS listings;
+CREATE DATABASE listings;
+USE listings;
 
-CREATE TABLE homes (
+CREATE TABLE listings (
     id                INT AUTO_INCREMENT,
     img               VARCHAR(250),
     house_type        VARCHAR(25),

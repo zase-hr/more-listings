@@ -8,9 +8,6 @@ some basic information, viewed on a carousel.
 - `npm install`
 
 ### Development
-Create a dbconfig file
-- Copy dockerDbConfig.js to /db/dbconfig.js
-- Alter the host, user, and password to reflect your own
 Bundle the client source
 - `npm run react-dev`
 Start the server
@@ -22,27 +19,78 @@ Start the server
 - `docker-compose up`
 
 ### Seeding the Database
-- This service uses MySQL
+**MySQL**
 Create a database on your host
 - mysql -u root -p < schema.sql
-Seed it
+Create a dbconfig file
+- Copy dockerDbConfig.js to /db/dbconfig.js
+- Alter the host, user, and password to reflect your own
+Seed the database
 - npm run seed
 
 ## API
+- Successful requests (other than GET) will return a RowDataPacket
 
-GET `/MoreHomes`
-- Successful requests to this route will return an array of objects 
-with the following structure:
-```
+#### CREATE
+
+POST `/Listing`
+- This route expects an object with the following structure:
 {
-  "id": 5,
-  "img": "https://s3-us-west-1.amazonaws.com/homes-pic/22.jpg",
-  "house_type": "ENTIRE HOUSE",
-  "location": "Claudieborough",
-  "description": "Sunny, Modern room",
-  "cost_per_night": 5300,
-  "rating": 4.11,
-  "votes": 413
+  "img": **_URL_**,
+  "house_type": **_string_**,
+  "location": **_string_**,
+  "description": **_string_**,
+  "cost_per_night": **_integer_**,
+  "rating": **_numeric_**,
+  "votes": **_integer_**
 }
-```
 
+#### READ
+- Successful requests will return an array of objects 
+with the following structure:
+{
+  "id": **-integer_**,
+  "img": **_URL_**,
+  "house_type": **_string_**
+  "location": **_string_**,
+  "description": **_string_**,
+  "cost_per_night": **_integer_**,
+  "rating": **_numeric_**,
+  "votes": **_integer_**
+}
+
+GET `/RandomListings`
+- Does not require a query parameter or body
+- Will return max 25 objects
+
+GET `/ListingsByDesc`
+- Requires a body of the following shape:
+{
+  "description": **_string__**
+}
+
+#### UPDATE
+
+PATCH `/Listing/:id`
+- Expects:
+  1) An id query parameter, and
+  2) A body containing any or all of the POST object properties.
+
+#### DELETE
+
+DELETE `/Listing/:id`
+- This route expects an id as a query parameter
+
+### Database Schema
+
+TABLE listings (
+  id                INT AUTO_INCREMENT,
+  img               VARCHAR(250),
+  house_type        VARCHAR(25),
+  location          VARCHAR(100),
+  description       VARCHAR(100),
+  cost_per_night    INT NOT NULL,
+  rating            DECIMAL(5,2),
+  votes             INT NOT NULL,
+  PRIMARY KEY(id)
+);

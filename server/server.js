@@ -1,6 +1,6 @@
-const appCreator = require('./app.js');
-const mysqlConnection = require('../db/conn.js');
+const server = require('./router.js');
+const mysqlConnection = require('../database/conn.js');
 
 // eslint-disable-next-line no-console
-const app = appCreator.createApp(mysqlConnection);
+const app = server.createServer(mysqlConnection);
 app.listen(3005, () => console.log('Listening on port: 3005'));
