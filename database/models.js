@@ -9,6 +9,17 @@ const getRandomListings = (connection, callback) => {
   });
 };
 
+const getListingsByDescription = (connection, desc, callback) => {
+  const query = 'SELECT * FROM listings WHERE ?';
+  connection.query(query, desc, (err, result) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, result);
+    }
+  });
+};
+
 const addManyListings = (connection, arr, callback) => {
   const query = 'INSERT INTO listings (img, house_type, location, description, cost_per_night, rating, votes) VALUES ?';
   connection.query(query, [arr], (err, result) => {
@@ -21,7 +32,6 @@ const addManyListings = (connection, arr, callback) => {
 };
 
 const addOneListing = (connection, fields, callback) => {
-  // console.log(fields);
   const query = 'INSERT INTO listings (img, house_type, location, description, cost_per_night, rating, votes) VALUES (?)';
   connection.query(query, fields, (err, result) => {
     if (err) {
@@ -71,5 +81,6 @@ module.exports = {
   updateOneListing,
   getRandomListings,
   getOneListing,
+  getListingsByDescription,
   deleteOneListing,
 };

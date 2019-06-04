@@ -29,27 +29,36 @@ Seed the database
 - npm run seed
 
 ## API
+- Successful requests (other than GET) will return a RowDataPacket
+
+GET
+- Successful requests will return an array of objects 
+with the following structure:
+{
+  "id": **-integer_**,
+  "img": **_URL_**,
+  "house_type": **_string_**
+  "location": **_string_**,
+  "description": **_string_**,
+  "cost_per_night": **_integer_**,
+  "rating": **_numeric_**,
+  "votes": **_integer_**
+}
 
 GET `/RandomListings`
-- Successful requests to this route will return an array of 25 objects 
-with the following structure:
-```
+- Does not require a query parameter or body
+- Will return max 25 objects
+
+GET `/ListingsByDesc`
+- Requires a body of the following shape:
 {
-  "id": 5,
-  "img": "https://s3-us-west-1.amazonaws.com/homes-pic/22.jpg",
-  "house_type": "ENTIRE HOUSE",
-  "location": "Claudieborough",
-  "description": "Sunny, Modern room",
-  "cost_per_night": 5300,
-  "rating": 4.11,
-  "votes": 413
+  "description": **_string__**
 }
-```
 
 POST `/Listing`
 - This route expects an object with the following structure:
 {
-  "img": **_string_**,
+  "img": **_URL_**,
   "house_type": **_string_**,
   "location": **_string_**,
   "description": **_string_**,
@@ -57,13 +66,11 @@ POST `/Listing`
   "rating": **_numeric_**,
   "votes": **_integer_**
 }
-- If successful, will return a RowDataPacket
 
 PATCH `/Listing/:id`
-- Expects a request body with:
+- Expects:
   1) An id query parameter, and
-  2) Any or all of the POST object properties.
+  2) A body containing any or all of the POST object properties.
 
 DELETE `/Listing/:id`
 - This route expects an id as a query parameter
-- Successful requests will return a RowDataPacket

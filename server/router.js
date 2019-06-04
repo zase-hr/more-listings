@@ -21,6 +21,17 @@ const createServer = (dbConnection) => {
     });
   });
 
+  // Get Listings by Description
+  app.get('/ListingsByDesc', (req, res) => {
+    db.getListingsByDescription(dbConnection, req.body, (err, data) => {
+      if (err) {
+        res.status(500).send();
+      } else {
+        res.status(200).send(data);
+      }
+    });
+  });
+
   // Add One Listing
   app.post('/Listing', (req, res) => {
     db.addOneListing(dbConnection, req.body, (err, result) => {
