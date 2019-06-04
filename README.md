@@ -35,29 +35,29 @@ Seed the database
 
 POST `/Listing`
 - This route expects an object with the following structure:
-  {
-      "img": **_URL_**,
-      "house_type": **_string_**,
-      "location": **_string_**,
-      "description": **_string_**,
-      "cost_per_night": **_integer_**,
-      "rating": **_numeric_**,
-      "votes": **_integer_**
-  }
+{\s\s
+    "img": **_URL_**,\s\s
+    "house_type": **_string_**,\s\s
+    "location": **_string_**,\s\s
+    "description": **_string_**,\s\s
+    "cost_per_night": **_integer_**,\s\s
+    "rating": **_numeric_**,\s\s
+    "votes": **_integer_**\s\s
+}\s\s
 
 #### READ
 - Successful requests will return an array of objects 
 with the following structure:
-  {
-      "id": **-integer_**,
-      "img": **_URL_**,
-      "house_type": **_string_**
-      "location": **_string_**,
-      "description": **_string_**,
-      "cost_per_night": **_integer_**,
-      "rating": **_numeric_**,
-      "votes": **_integer_**
-  }
+{\s\s
+    "id": **-integer_**,\s\s
+    "img": **_URL_**,\s\s
+    "house_type": **_string_**
+    "location": **_string_**,\s\s
+    "description": **_string_**,\s\s
+    "cost_per_night": **_integer_**,\s\s
+    "rating": **_numeric_**,\s\s
+    "votes": **_integer_**\s\s
+}
 
 GET `/RandomListings`
 - Does not require a query parameter or body
@@ -65,9 +65,9 @@ GET `/RandomListings`
 
 GET `/ListingsByDesc`
 - Requires a body of the following shape:
-  {
-      "description": **_string__**
-  }
+{\s\s
+    "description": **_string__**\s\s
+}
 
 #### UPDATE
 
@@ -83,14 +83,14 @@ DELETE `/Listing/:id`
 
 ### Database Schema
 
-  TABLE listings (
-      id                INT AUTO_INCREMENT,
-      img               VARCHAR(250),
-      house_type        VARCHAR(25),
-      location          VARCHAR(100),
-      description       VARCHAR(100),
-      cost_per_night    INT NOT NULL,
-      rating            DECIMAL(5,2),
-      votes             INT NOT NULL,
-      PRIMARY KEY(id)
-  );
+TABLE listings (\s\s
+    id                INT AUTO_INCREMENT,\s\s
+    img               VARCHAR(250),\s\s
+    house_type        VARCHAR(25),\s\s
+    location          VARCHAR(100),\s\s
+    description       VARCHAR(100),\s\s
+    cost_per_night    INT NOT NULL,\s\s
+    rating            DECIMAL(5,2),\s\s
+    votes             INT NOT NULL,\s\s
+    PRIMARY KEY(id)\s\s
+);
