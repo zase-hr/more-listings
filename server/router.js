@@ -43,6 +43,17 @@ const createServer = (dbConnection) => {
     });
   });
 
+  // Update One Listing
+  app.patch('/Listing/:id', (req, res) => {
+    db.updateOneListing(dbConnection, req.body, req.params.id, (err, result) => {
+      if (err) {
+        res.status(500).send();
+      } else {
+        res.status(200).send(result);
+      }
+    });
+  });
+
   // Delete One Listing
   app.delete('/Listing/:id', (req, res) => {
     db.deleteOneListing(dbConnection, req.params.id, (err, result) => {

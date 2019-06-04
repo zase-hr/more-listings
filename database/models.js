@@ -32,10 +32,14 @@ const addOneListing = (connection, fields, callback) => {
   });
 };
 
-const updateOneListing = (connection, args, callback) => {
-  const query = '';
-  connection.query(query, args, (err, result) => {
-
+const updateOneListing = (connection, data, id, callback) => {
+  const query = `UPDATE listings SET ? WHERE id = ${id}`;
+  connection.query(query, data, (err, result) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, result);
+    }
   });
 };
 
@@ -64,6 +68,7 @@ const deleteOneListing = (connection, id, callback) => {
 module.exports = {
   addManyListings,
   addOneListing,
+  updateOneListing,
   getRandomListings,
   getOneListing,
   deleteOneListing,

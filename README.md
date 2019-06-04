@@ -59,9 +59,11 @@ POST `/Listing`
 }
 - If successful, will return a RowDataPacket
 
-DELETE `/Listing`
-- This route expects an id
-{
-  "id": **_integer_**
-}
+PATCH `/Listing/:id`
+- Expects a request body with:
+  1) An id query parameter, and
+  2) Any or all of the POST object properties.
+
+DELETE `/Listing/:id`
+- This route expects an id as a query parameter
 - Successful requests will return a RowDataPacket
