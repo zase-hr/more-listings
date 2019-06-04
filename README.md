@@ -35,29 +35,29 @@ Seed the database
 
 POST `/Listing`
 - This route expects an object with the following structure:
-  {  
-      "img": **_URL_**,  
-      "house_type": **_string_**,  
-      "location": **_string_**,  
-      "description": **_string_**,  
-      "cost_per_night": **_integer_**,  
-      "rating": **_numeric_**,  
-      "votes": **_integer_**  
-  }
+{  
+ * "img": **_URL_**,  
+ * "house_type": **_string_**,  
+ * "location": **_string_**,  
+ * "description": **_string_**,  
+ * "cost_per_night": **_integer_**,  
+ * "rating": **_numeric_**,  
+ * "votes": **_integer_**  
+}
 
 #### READ
 - Successful requests will return an array of objects 
 with the following structure:
-  {  
-      "id": **-integer_**,  
-      "img": **_URL_**,  
-      "house_type": **_string_**
-      "location": **_string_**,  
-      "description": **_string_**,  
-      "cost_per_night": **_integer_**,  
-      "rating": **_numeric_**,  
-      "votes": **_integer_**  
-  }
+{  
+ * "id": **-integer_**,  
+ * "img": **_URL_**,  
+ * "house_type": **_string_**
+ * "location": **_string_**,  
+ * "description": **_string_**,  
+ * "cost_per_night": **_integer_**,  
+ * "rating": **_numeric_**,  
+ * "votes": **_integer_**  
+}
 
 GET `/RandomListings`
 - Does not require a query parameter or body
@@ -83,15 +83,14 @@ DELETE `/Listing/:id`
 
 ### Database Schema
 
-  TABLE listings (  
-      id                INT AUTO_INCREMENT,  
-      img               VARCHAR(250),  
-      house_type        VARCHAR(25),  
-      location          VARCHAR(100),  
-      description       VARCHAR(100),  
-      cost_per_night    INT NOT NULL,  
-      rating            DECIMAL(5,2),  
-      votes             INT NOT NULL,  
-      PRIMARY KEY(id)  
-  );  
-  
+TABLE listings (  
+ * id                INT AUTO_INCREMENT,  
+ * img               VARCHAR(250),  
+ * house_type        VARCHAR(25),  
+ * location          VARCHAR(100),  
+ * description       VARCHAR(100),  
+ * cost_per_night    INT NOT NULL,  
+ * rating            DECIMAL(5,2),  
+ * votes             INT NOT NULL,  
+ * PRIMARY KEY(id)  
+);  
