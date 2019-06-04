@@ -31,7 +31,21 @@ Seed the database
 ## API
 - Successful requests (other than GET) will return a RowDataPacket
 
-GET
+#### CREATE
+
+POST `/Listing`
+- This route expects an object with the following structure:
+{
+  "img": **_URL_**,
+  "house_type": **_string_**,
+  "location": **_string_**,
+  "description": **_string_**,
+  "cost_per_night": **_integer_**,
+  "rating": **_numeric_**,
+  "votes": **_integer_**
+}
+
+#### READ
 - Successful requests will return an array of objects 
 with the following structure:
 {
@@ -55,22 +69,14 @@ GET `/ListingsByDesc`
   "description": **_string__**
 }
 
-POST `/Listing`
-- This route expects an object with the following structure:
-{
-  "img": **_URL_**,
-  "house_type": **_string_**,
-  "location": **_string_**,
-  "description": **_string_**,
-  "cost_per_night": **_integer_**,
-  "rating": **_numeric_**,
-  "votes": **_integer_**
-}
+#### UPDATE
 
 PATCH `/Listing/:id`
 - Expects:
   1) An id query parameter, and
   2) A body containing any or all of the POST object properties.
+
+#### DELETE
 
 DELETE `/Listing/:id`
 - This route expects an id as a query parameter
