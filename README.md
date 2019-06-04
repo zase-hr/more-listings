@@ -34,22 +34,21 @@ Seed the database
 #### CREATE
 
 POST `/Listing`
-- This route expects an object with the following structure:
+- This route expects an object with the following structure:  
 {  
-    "img": **_URL_**,  
-    "house_type": **_string_**,  
-    "location": **_string_**,  
-    "description": **_string_**,  
-    "cost_per_night": **_integer_**,  
-    "rating": **_numeric_**,  
-    "votes": **_integer_**  
+&nbsp;&nbsp;"img": **_URL_**,  
+&nbsp;&nbsp;"house_type": **_string_**,  
+&nbsp;&nbsp;"location": **_string_**,  
+&nbsp;&nbsp;"description": **_string_**,  
+&nbsp;&nbsp;"cost_per_night": **_integer_**,  
+&nbsp;&nbsp;"rating": **_numeric_**,  
+&nbsp;&nbsp;"votes": **_integer_**  
 }  
 
 #### READ
-- Successful requests will return an array of objects 
-with the following structure:
+- Successful requests will return an array of objects with the following structure:  
 {  
-&nbsp;&nbsp;"id": **-integer_**,  
+&nbsp;&nbsp;"id": **_integer_**,  
 &nbsp;&nbsp;"img": **_URL_**,  
 &nbsp;&nbsp;"house_type": **_string_**
 &nbsp;&nbsp;"location": **_string_**,  
@@ -64,9 +63,9 @@ GET `/RandomListings`
 - Will return max 25 objects
 
 GET `/ListingsByDesc`
-- Requires a body of the following shape:
+- Requires a body of the following shape:  
 {  
-  "description": **_string__**  
+&nbsp;&nbsp;"description": **_string__**  
 }
 
 #### UPDATE
