@@ -44,7 +44,7 @@ const createServer = (dbConnection) => {
   });
 
   // Delete One Listing
-  app.delete('/DeleteListing/:id', (req, res) => {
+  app.delete('/Listing/:id', (req, res) => {
     db.deleteOneListing(dbConnection, req.params.id, (err, result) => {
       if (err) {
         res.status(500).send();

@@ -58,3 +58,10 @@ POST `/Listing`
   "votes": **_integer_**
 }
 - If successful, will return a RowDataPacket
+
+DELETE `/Listing`
+- This route expects an id
+{
+  "id": **_integer_**
+}
+- Successful requests will return a RowDataPacket
