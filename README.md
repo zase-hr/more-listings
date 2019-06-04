@@ -36,27 +36,27 @@ Seed the database
 POST `/Listing`
 - This route expects an object with the following structure:
 {  
- * "img": **_URL_**,  
- * "house_type": **_string_**,  
- * "location": **_string_**,  
- * "description": **_string_**,  
- * "cost_per_night": **_integer_**,  
- * "rating": **_numeric_**,  
- * "votes": **_integer_**  
-}
+    "img": **_URL_**,  
+    "house_type": **_string_**,  
+    "location": **_string_**,  
+    "description": **_string_**,  
+    "cost_per_night": **_integer_**,  
+    "rating": **_numeric_**,  
+    "votes": **_integer_**  
+}  
 
 #### READ
 - Successful requests will return an array of objects 
 with the following structure:
 {  
- * "id": **-integer_**,  
- * "img": **_URL_**,  
- * "house_type": **_string_**
- * "location": **_string_**,  
- * "description": **_string_**,  
- * "cost_per_night": **_integer_**,  
- * "rating": **_numeric_**,  
- * "votes": **_integer_**  
+&nbsp;&nbsp;"id": **-integer_**,  
+&nbsp;&nbsp;"img": **_URL_**,  
+&nbsp;&nbsp;"house_type": **_string_**
+&nbsp;&nbsp;"location": **_string_**,  
+&nbsp;&nbsp;"description": **_string_**,  
+&nbsp;&nbsp;"cost_per_night": **_integer_**,  
+&nbsp;&nbsp;"rating": **_numeric_**,  
+&nbsp;&nbsp;"votes": **_integer_**  
 }
 
 GET `/RandomListings`
@@ -65,9 +65,9 @@ GET `/RandomListings`
 
 GET `/ListingsByDesc`
 - Requires a body of the following shape:
-  {  
-      "description": **_string__**  
-  }
+{  
+  "description": **_string__**  
+}
 
 #### UPDATE
 
@@ -84,13 +84,13 @@ DELETE `/Listing/:id`
 ### Database Schema
 
 TABLE listings (  
- * id                INT AUTO_INCREMENT,  
- * img               VARCHAR(250),  
- * house_type        VARCHAR(25),  
- * location          VARCHAR(100),  
- * description       VARCHAR(100),  
- * cost_per_night    INT NOT NULL,  
- * rating            DECIMAL(5,2),  
- * votes             INT NOT NULL,  
- * PRIMARY KEY(id)  
-);  
+&nbsp;&nbsp;id                INT AUTO_INCREMENT,  
+&nbsp;&nbsp;img               VARCHAR(250),  
+&nbsp;&nbsp;house_type        VARCHAR(25),  
+&nbsp;&nbsp;location          VARCHAR(100),  
+&nbsp;&nbsp;description       VARCHAR(100),  
+&nbsp;&nbsp;cost_per_night    INT NOT NULL,  
+&nbsp;&nbsp;rating            DECIMAL(5,2),  
+&nbsp;&nbsp;votes             INT NOT NULL,  
+&nbsp;&nbsp;PRIMARY KEY(id)  
+);
