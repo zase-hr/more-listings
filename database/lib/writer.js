@@ -25,6 +25,7 @@ module.exports.csv = function generateCSVRecords(n, generator, filepath, header)
   })();
 }
 
+//  Write N of any data as JSON
 module.exports.json = function generateJSONData(n, generator, filepath) {
   const file = fs.createWriteStream(filepath);
   const start = Date.now();
