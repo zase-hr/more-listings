@@ -3,16 +3,17 @@ CREATE DATABASE listings;
 USE listings;
 
 CREATE TABLE listings (
-    id                INT AUTO_INCREMENT,
-    img               INT,
-    house_type        VARCHAR(25),
-    location          VARCHAR(100),
-    description       VARCHAR(100),
-    cost_per_night    INT NOT NULL,
-    rating            DECIMAL(5,2),
-    votes             INT NOT NULL,
-    PRIMARY KEY(id),
-    FOREIGN KEY(id) REFERENCES photos(url);
+  id                INT AUTO_INCREMENT,
+  owner             INT,
+  img               INT,
+  house_type        TEXT,
+  location          TEXT,
+  description       TEXT,
+  cost_per_night    INT NOT NULL,
+  rating            DECIMAL(5,2),
+  votes             INT NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(id) REFERENCES photos(url);
 );
 
 CREATE TABLE listing_relations (
@@ -26,6 +27,26 @@ CREATE TABLE listing_relations (
 
 CREATE TABLE photos (
   id                INT AUTO_INCREMENT,
-  img               VARCHAR
+  img               TEXT
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE users (
+  id                INT AUTO_INCREMENT,
+  firstname         TEXT,
+  lastname          TEXT,
+  email             TEXT,
+  PRIMARY KEY(id)
+)
+
+CREATE TABLE reports (
+  id                INT AUTO_INCREMENT,
+  author            INT,
+  listing           INT,
+  positive          BOOLEAN,
+  report            TEXT,
+  created           DATETIME,
   PRIMARY KEY(id),
+  FOREIGN KEY(author) REFERENCES users(id),
+  FOREIGN KEY(listing) REFERENCES listings(id),
 );
