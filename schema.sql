@@ -41,8 +41,8 @@ CREATE TABLE users (
 
 CREATE TABLE reports (
   id                INT AUTO_INCREMENT,
-  author            INT,
   listing           INT,
+  author            INT,
   positive          BOOLEAN,
   report            TEXT,
   created           DATETIME,
