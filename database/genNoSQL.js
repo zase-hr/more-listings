@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const faker = require('faker');
 const images = require('./imageUrls');
-const writer = require('./writer');
+const writer = require('./lib/writer');
 
 const houseType = ['ENTIRE HOUSE', 'ENTIRE APARTMENT', 'PRIVATE ROOM', 'SHARED ROOM'];
 const cities = ['San Francisco', 'New York City', 'Dallas', 'Nashville', 'Denver', 'Kansas City', 'Boston'];
