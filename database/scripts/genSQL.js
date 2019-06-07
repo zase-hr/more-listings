@@ -17,13 +17,13 @@ function createListingData(totalUsers) {
 //  Data for the related-ness table
 const relationHeader = 'id_a,id_b';
 function createRelationData(totalListings) {
-  return `id_a:${Math.ceil(Math.random() * totalListings)},id_b:${Math.ceil(Math.random() * totalListings)}`;
+  return `${Math.ceil(Math.random() * totalListings)},${Math.ceil(Math.random() * totalListings)}`;
 }
 
 //  Data for the photos table
 const photoHeader = 'img';
 function createPhotoData() {
-  return `${images.getImg()}`;
+  return `"${images.getImg()}"`;
 }
 
 //  Data for the Users table
@@ -47,10 +47,15 @@ const reportPath = path.resolve(__dirname, '../storage/sql_reports.csv');
 
 
 // Write all data
-const totalListings = 1e2;
-const totalUsers = 1e3;
-// writer.csv(totalListings, () => createListingData(totalListings), listingPath, listingHeader);
-// writer.csv(1e3, () => createRelationData(totalListings), relationPath, relationHeader);
-// writer.csv(1e3, createPhotoData, photoPath, photoHeader);
-// writer.sql(totalUsers, createUserData, userPath, 'users');
-writer.csv(1e1, () => createReportData(totalListings, totalUsers), reportPath, reportHeader);
+
+//  'primary' should be equal to the primary record total
+module.exports.generate = function(primary = 1e2, moreCommon = 1e3, lessCommon = 1e1) {
+  writer.csv(primary, () => createListingData(primary), listingPath, listingHeader);
+  writer.csv(moreCommon, () => createRelationData(primary), relationPath, relationHeader);
+  writer.csv(moreCommon, createPhotoData, photoPath, photoHeader);
+    //  must be written to sql
+  writer.sql(moreCommon, createUserData, userPath, 'users');
+  writer.csv(lessCommon, () => createReportData(primary, moreCommon), reportPath, reportHeader);
+};
+
+module.exports.generate(1e7, 1e7, 1e5);
