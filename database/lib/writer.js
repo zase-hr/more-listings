@@ -1,11 +1,10 @@
 const fs = require('fs');
 
 //  Write N Of Any Data as CSV
-module.exports.csv = function generateCSVRecords(n, generator, filepath, header) {
+module.exports.csv = function generateCSVRecords(n, generator, filepath) {
   const file = fs.createWriteStream(filepath + '.csv');
   const start = Date.now();
   let i = 0;
-  header ? file.write(`${header}\n`, 'utf8') : null;
   (async() => {
     for (; i < n; i++) {
       if (i < n - 1) {
@@ -13,7 +12,7 @@ module.exports.csv = function generateCSVRecords(n, generator, filepath, header)
           await new Promise(resolve => file.once('drain', resolve));
         }
       } else {
-        if (!file.write(`${generator()}`, 'utf8')) {
+        if (!file.write(`${generator(i)}`, 'utf8')) {
           await new Promise(resolve => file.once('drain', resolve));
         }
       }

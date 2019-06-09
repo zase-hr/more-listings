@@ -14,10 +14,10 @@
 # Create or replace a more_listings database in SQLite3
 if [ $1 = "-refresh" ]; then
   rm more_listings.db
+# Apply my schema file to the database
   sqlite3 more_listings.db ".read schema.sql"
   shift
 fi
-# Apply my schema file to the database
 
 # Handle .sql and .csv files differently
 case "$1" in

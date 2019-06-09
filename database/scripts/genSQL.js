@@ -29,11 +29,11 @@ function createRelationData(index, totalListings) {
   let relation = 0;
   for (let i = 0; i < 6; i++) {
     relation = Math.ceil(Math.random() * totalListings);
-    relation === index ? relation += 1 : null;
+    relation === (index + 1) ? relation += 1 : null;
     if (i === 5) {
-      relations += `${index},${relation}`;
+      relations += `${index + 1},${relation}`;
     } else {
-      relations += `${index},${relation}\n`;
+      relations += `${index + 1},${relation}\n`;
     }
   }
   return relations;
@@ -67,12 +67,12 @@ const reportPath = path.resolve(__dirname, '../storage/report_table');
 // Write all data
 
 //  'primary' should be equal to the primary record total
-module.exports.generate = function(primary = 1e2, moreCommon = 5e2, lessCommon = 1e1) {
-  writer.csv(primary, () => createListingData(moreCommon), listingPath, listingHeader);
-  writer.csv(primary, (index) => createRelationData(index, primary), relationPath, relationHeader);
+module.exports.generate = function(primary = 1e3, moreCommon = 5e3, lessCommon = 1e2) {
+  writer.csv(primary, () => createListingData(moreCommon), listingPath);
+  writer.csv(primary, (index) => createRelationData(index, primary), relationPath);
   writer.sql(moreCommon, () => createPhotoData(primary), photoPath, 'photo');
   writer.sql(moreCommon, createUserData, userPath, 'user_profile');
-  writer.csv(lessCommon, () => createReportData(primary, moreCommon), reportPath, reportHeader);
+  writer.csv(lessCommon, () => createReportData(primary, moreCommon), reportPath);
 };
 
 // module.exports.generate();
