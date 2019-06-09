@@ -26,7 +26,7 @@ case "$1" in
     for arg in "$@"
     do
       echo "Running SQL seed..."
-      sqlite3 more_listings.db -cmd "begin transaction;" ".read sql_${arg}.sql" "commit;"
+      sqlite3 more_listings.db -cmd "begin transaction;" ".separator ," ".read ${arg}_table.sql" "commit;"
     done
     ;;
   -csv)
@@ -34,7 +34,7 @@ case "$1" in
     for arg in "$@"
     do
       echo "Running CSV seed..."
-      sqlite3 more_listings.db -cmd ".separator ," ".import sql_${arg}.csv ${arg}" 
+      sqlite3 more_listings.db -cmd ".separator ," ".import ${arg}_table.csv ${arg}" 
     done
     ;;
   *) echo "Option $1 not recognized" ;;

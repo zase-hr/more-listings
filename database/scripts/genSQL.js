@@ -1,3 +1,10 @@
+// ### Generate Data For SQL or other applications ### //
+// ## HOWTO:
+//  Specify filepaths, not including filetype extensions, for where you want
+//    your data to be written to
+//  In 'generate', specify the writer tool (csv, json, or sql) you wish to
+//    have your generated data created as
+
 const fs = require('fs');
 const path = require('path');
 const faker = require('faker');
@@ -9,21 +16,33 @@ const cities = ['San Francisco', 'New York City', 'Dallas', 'Nashville', 'Denver
 const description = ['Cozy house in friendly neighborhood', 'Spacious apartment', 'Sunny, Modern room', 'Penthouse Studio', 'Perfect Weekender'];
 
 //  Data for the listing table
-const listingHeader = 'owner,img,house_type,location,description,cost_per_night,rating,votes';
+const listingHeader = 'user_profile,house_type,location,description,cost_per_night,rating,votes';
 function createListingData(totalUsers) {
-  return `${Math.ceil(Math.random() * totalUsers)},${Math.ceil(Math.random() * 1e7)},"${houseType[Math.floor(Math.random() * houseType.length)]}","${cities[Math.floor(Math.random() * cities.length)]}","${description[Math.floor(Math.random() * description.length)]}",${35 + (Math.ceil(Math.random() * 7465))},${(Math.random() * (5 - 0) + 0).toFixed(2)},${Math.floor(Math.random() * 3500)}`
+  return `${Math.ceil(Math.random() * totalUsers)},"${houseType[Math.floor(Math.random() * houseType.length)]}","${cities[Math.floor(Math.random() * cities.length)]}","${description[Math.floor(Math.random() * description.length)]}",${35 + (Math.ceil(Math.random() * 7465))},${(Math.random() * (5 - 0) + 0).toFixed(2)},${Math.floor(Math.random() * 3500)}`
 }
 
-//  Data for the related-ness table
-const relationHeader = 'id_a,id_b';
-function createRelationData(totalListings) {
-  return `${Math.ceil(Math.random() * totalListings)},${Math.ceil(Math.random() * totalListings)}`;
+//  Data for the listing relations table
+const relationHeader = 'listing_a,listing_b';
+function createRelationData(index, totalListings) {
+  //  create 6 relations for listing index
+  let relations = '';
+  let relation = 0;
+  for (let i = 0; i < 6; i++) {
+    relation = Math.ceil(Math.random() * totalListings);
+    relation === index ? relation += 1 : null;
+    if (i === 5) {
+      relations += `${index},${relation}`;
+    } else {
+      relations += `${index},${relation}\n`;
+    }
+  }
+  return relations;
 }
 
 //  Data for the photos table
-const photoHeader = 'img';
-function createPhotoData() {
-  return `"${images.getImg()}"`;
+const photoHeader = 'photo_url, listing';
+function createPhotoData(totalListings) {
+  return `"${images.getImg()}",${Math.ceil(Math.random() * totalListings)}`;
 }
 
 //  Data for the Users table
@@ -33,29 +52,28 @@ function createUserData() {
 }
 
 //  Data for the Reports table
-const reportHeader = 'author,listing,positive,report,created';
+const reportHeader = 'listing,user_profile,positive,report,created';
 function createReportData(totalUsers, totalListings) {
   return `${Math.ceil(Math.random() * totalListings)},${Math.ceil(Math.random() * totalUsers)},${!!Math.round(Math.random())},"${faker.lorem.sentences()}","${faker.date.past(5)}"`;
 }
 
-//  Paths to data storage
-const listingPath = path.resolve(__dirname, '../storage/sql_listings.csv');
-const relationPath = path.resolve(__dirname, '../storage/sql_listing_relations.csv');
-const photoPath = path.resolve(__dirname, '../storage/sql_photos.csv');
-const userPath = path.resolve(__dirname, '../storage/sql_users.sql');
-const reportPath = path.resolve(__dirname, '../storage/sql_reports.csv');
-
+//  Paths to data storage (no extension)
+const listingPath = path.resolve(__dirname, '../storage/listing_table');
+const relationPath = path.resolve(__dirname, '../storage/listing_relation_table');
+const photoPath = path.resolve(__dirname, '../storage/photo_table');
+const userPath = path.resolve(__dirname, '../storage/user_profile_table');
+const reportPath = path.resolve(__dirname, '../storage/report_table');
 
 // Write all data
 
 //  'primary' should be equal to the primary record total
-module.exports.generate = function(primary = 1e2, moreCommon = 1e3, lessCommon = 1e1) {
-  writer.csv(primary, () => createListingData(primary), listingPath, listingHeader);
-  writer.csv(moreCommon, () => createRelationData(primary), relationPath, relationHeader);
-  writer.csv(moreCommon, createPhotoData, photoPath, photoHeader);
-    //  must be written to sql
-  writer.sql(moreCommon, createUserData, userPath, 'users');
+module.exports.generate = function(primary = 1e2, moreCommon = 5e2, lessCommon = 1e1) {
+  writer.csv(primary, () => createListingData(moreCommon), listingPath, listingHeader);
+  writer.csv(primary, (index) => createRelationData(index, primary), relationPath, relationHeader);
+  writer.sql(moreCommon, () => createPhotoData(primary), photoPath, 'photo');
+  writer.sql(moreCommon, createUserData, userPath, 'user_profile');
   writer.csv(lessCommon, () => createReportData(primary, moreCommon), reportPath, reportHeader);
 };
 
-module.exports.generate(1e7, 1e7, 1e5);
+// module.exports.generate();
+module.exports.generate(1e7, 5e7, 1e5);

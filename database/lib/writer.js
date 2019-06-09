@@ -2,14 +2,14 @@ const fs = require('fs');
 
 //  Write N Of Any Data as CSV
 module.exports.csv = function generateCSVRecords(n, generator, filepath, header) {
-  const file = fs.createWriteStream(filepath);
+  const file = fs.createWriteStream(filepath + '.csv');
   const start = Date.now();
-  let i = n;
+  let i = 0;
   header ? file.write(`${header}\n`, 'utf8') : null;
   (async() => {
-    for (; i > -1; i--) {
-      if (i > 0) {
-        if (!file.write(`${generator()}\n`, 'utf8')) {
+    for (; i < n; i++) {
+      if (i < n - 1) {
+        if (!file.write(`${generator(i)}\n`, 'utf8')) {
           await new Promise(resolve => file.once('drain', resolve));
         }
       } else {
@@ -26,7 +26,7 @@ module.exports.csv = function generateCSVRecords(n, generator, filepath, header)
 
 //  Write N of any data as JSON
 module.exports.json = function generateJSONData(n, generator, filepath) {
-  const file = fs.createWriteStream(filepath);
+  const file = fs.createWriteStream(filepath + '.json');
   const start = Date.now();
   file.write('[');
   (async() => {
@@ -54,7 +54,7 @@ module.exports.json = function generateJSONData(n, generator, filepath) {
 
 //  Write N of any data as SQL INSERT Statements
 module.exports.sql = function generateJSONData(n, generator, filepath, tableName) {
-  const file = fs.createWriteStream(filepath);
+  const file = fs.createWriteStream(filepath + '.sql');
   const start = Date.now();
   (async() => {
     for(let i = 0; i < n; i++) {
