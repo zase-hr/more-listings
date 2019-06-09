@@ -7,6 +7,9 @@ module.exports.csv = function generateCSVRecords(n, generator, filepath) {
   let i = 0;
   (async() => {
     for (; i < n; i++) {
+      if (i % 1000000 === 0) {
+        console.log(`Batch ${i / 1e6} completed`);
+      }
       if (i < n - 1) {
         if (!file.write(`${generator(i)}\n`, 'utf8')) {
           await new Promise(resolve => file.once('drain', resolve));
