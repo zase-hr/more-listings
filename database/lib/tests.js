@@ -3,7 +3,7 @@ const db = require('./connect');
 const testSQLite = {
   queries: {
     simple: `SELECT * FROM listing WHERE rowid = ?`,
-    full: 'select L.*, P.photo_url from listing L inner join listing_relation LR inner join photo P on ((LR.listing_b = P.listing) and (LR.listing_b = L.rowid)) where LR.listing_a = ?;'
+    full: 'select L.* from listing L inner join listing_relation LR on (LR.listing_b = L.rowid) where LR.listing_a = ?;'
   },
   getN(n) {
     const start = Date.now();
