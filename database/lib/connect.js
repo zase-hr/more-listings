@@ -1,5 +1,5 @@
 const sqlite = require('sqlite3');
-const neo4j = require('neo4j-driver');
+// const neo4j = require('neo4j-driver');
 const path = require('path');
 
 // ## SQLite3
