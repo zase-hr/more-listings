@@ -7,7 +7,7 @@ const testSQLite = {
   },
   getN(n) {
     const start = Date.now();
-    console.log('Starting test');
+    // console.log('Starting test');
     for (let i = 0; i < n; i++) {
       testSQLite.getRandom(n, i, () => {
         console.log(`Retrieved ${n} in ${(Date.now() - start) / 1000} seconds`);
@@ -20,14 +20,14 @@ const testSQLite = {
         console.log(err);
       }
       if (i === n - 1) {
-        console.log(rows);
+        // console.log(rows);
         callback();
       }
     });
   }
 }
 
-// testSQLite.getN(1000);
+testSQLite.getN(1000);
 
 const testNeo4j = {
   queries: '',

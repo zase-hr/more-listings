@@ -10,13 +10,14 @@ const path = require('path');
 const faker = require('faker');
 const images = require('../imageURLs');
 const writer = require('./writer');
+const writerWithID = require('./writerWithID');
 
 const houseType = ['ENTIRE HOUSE', 'ENTIRE APARTMENT', 'PRIVATE ROOM', 'SHARED ROOM'];
 const cities = ['San Francisco', 'New York City', 'Dallas', 'Nashville', 'Denver', 'Kansas City', 'Boston'];
 const description = ['Cozy house in friendly neighborhood', 'Spacious apartment', 'Sunny, Modern room', 'Penthouse Studio', 'Perfect Weekender'];
 
 //  Data for the listing table
-const listingHeader = 'user_profile,house_type,location,description,cost_per_night,rating,votes';
+const listingHeader = 'user_profile,house_type,location,description,cost_per_night,rating,votes,photo';
 function createListingData(totalUsers) {
   return `${Math.ceil(Math.random() * totalUsers)},"${houseType[Math.floor(Math.random() * houseType.length)]}","${cities[Math.floor(Math.random() * cities.length)]}","${description[Math.floor(Math.random() * description.length)]}",${35 + (Math.ceil(Math.random() * 7465))},${(Math.random() * (5 - 0) + 0).toFixed(2)},${Math.floor(Math.random() * 3500)},"${images.getImg()}"`
 }
@@ -64,25 +65,28 @@ const miniPaths = {
   user: path.resolve(__dirname, '../storage/mini_user_profile_table'),
   report: path.resolve(__dirname, '../storage/mini_report_table')
 }
-
+const pathWithID = {
+  listing: path.resolve(__dirname, '../storage/neo4j/listing_withID_table'),
+}
 // Write all data
 
 //  'primary' should be equal to the primary record total
 module.exports.generateMini = function(primary = 1e3, moreCommon = 5e3, lessCommon = 1e2) {
   writer.csv(primary, () => createListingData(moreCommon), miniPaths.listing);
-  writer.csv(primary, (index) => createRelationData(index, primary), miniPaths.relation);
+  // writer.csv(primary, (index) => createRelationData(index, primary), miniPaths.relation);
   // writer.csv(moreCommon, createUserData, miniPaths.user);
-  writer.sql(moreCommon, createUserData, miniPaths.user, 'user_profile');
-  writer.csv(lessCommon, () => createReportData(primary, moreCommon), miniPaths.report);
+  // writer.sql(moreCommon, createUserData, miniPaths.user, 'user_profile');
+  // writer.csv(lessCommon, () => createReportData(primary, moreCommon), miniPaths.report);
 };
 
 module.exports.generateFull = function(primary = 1e7, moreCommon = 5e7, lessCommon = 1e5) {
-  writer.csv(primary, () => createListingData(moreCommon), fullPaths.listing);
-  writer.csv(primary, (index) => createRelationData(index, primary), fullPaths.relation);
+  // writer.csv(primary, () => createListingData(moreCommon), fullPaths.listing);
+  writerWithID.csv(primary, () => createListingData(moreCommon), pathWithID.listing);
+  // writer.csv(primary, (index) => createRelationData(index, primary), fullPaths.relation);
   // writer.csv(moreCommon, createUserData, fullPaths.user);
-  writer.sql(moreCommon, createUserData, fullPaths.user, 'user_profile');
-  writer.csv(lessCommon, () => createReportData(primary, moreCommon), fullPaths.report);
+  // writer.sql(moreCommon, createUserData, fullPaths.user, 'user_profile');
+  // writer.csv(lessCommon, () => createReportData(primary, moreCommon), fullPaths.report);
 };
 
-module.exports.generateMini();
-// module.exports.generateFull();
+// module.exports.generateMini();
+module.exports.generateFull();
