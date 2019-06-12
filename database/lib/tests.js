@@ -38,75 +38,23 @@ const testSQLite = {
 
 const testNeo4j = {
   queries: {
-    simple: 'match (l:Listing {id: 997}) return l',
-    full: (id) => `match (l:Listing {id: ${id}})-[:RECOMMENDS]->(n:Listing) return n`
+    simple: 'match (l:Listing {id: $id}) return l',
+    full: (id) => `match (l:Listing {id: $id)-[:RECOMMENDS]->(n:Listing) return n`,
+    fullParam: 'match (l:Listing {id: $id})-[:RECOMMENDS]->(n:Listing) return n'
   },
-  getN(n) {
-    const start = Date.now();
-    console.log(`Testing ${n} Neo4j queries\n`);
-    for (let i = 0; i < n; i++) {
-      testNeo4j.getRandom(n, i, testNeo4j.queries.full(Math.ceil(Math.random() * n) * i), () => {
-        console.log(`Retrieved ${n} in ${(Date.now() - start) / 1000} seconds`);
-      });
-    }
-  },
-  getRandom(n, i, query, callback) {
+  getN(n, max) {
     const session = driver.session();
-    console.log(query);
-    const readTxPromise = session.readTransaction(tx => tx.run(query));
+    const readTxPromise = session.readTransaction(tx => tx.run(testNeo4j.queries.simple, {'id': 5}));
     readTxPromise.then(result => {
       session.close();
-      if (n === i) {
-        callback();
-        driver.close();
+      if (result) {
+        console.log(result);
       }
     })
     .catch(err => {
-      session.close();
-      driver.close();
-      console.log('Neo4j Transaction Error: ' + err);
+      console.log('Transaction error: ' + err);
     });
-  },
-  getNWithTransactions(n, max) {
-    console.log(`Testing ${n} Neo4j queries\n`);
-    const start = Date.now();
-    let queries = [];
-    for (let k = 0; k < n / 10; k++) {
-      queries = [];
-      for (let i = 0; i < Math.ceil(n / 10); i++) {
-        queries.push(testNeo4j.queries.full(Math.ceil(Math.random() * max)));
-      }
-      testNeo4j.callTransaction(queries, () => {
-        console.log('transaction complete');
-        console.log(k);
-        if (k === (n / 10) - 1) {
-          console.log(`Completed ${n} Neo4j queries in ${((Date.now() - start) / 1000)} seconds`);
-        }
-      });
-    }
-  },
-  callTransaction(queries, callback) {
-    const session = driver.session();
-    const transaction = session.beginTransaction();
-    for (let i = 0; i < queries.length; i++) {
-      transaction
-        .run(queries[i])
-        .then(result => {
-          if (i === queries.length - 1) {
-            callback();
-            transaction.commit();
-            session.close();
-            driver.close();
-          }
-        })
-        .catch(err => {
-          console.log('Neo4j Transaction Error:' + err);
-          transaction.commit();
-          session.close();
-          driver.close();
-        });
-    }
   }
 }
 
-testNeo4j.getNWithTransactions(50, 1e7);
+testNeo4j.getN(1, 1e7);
