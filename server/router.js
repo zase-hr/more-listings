@@ -14,7 +14,7 @@ app.use(express.static(`${__dirname}/../public/dist`));
 app.get('/:id/RecommendedListings/', (req, res) => {
   db.getRecommendedListings(neo4jDriver, req.params.id, (err, result) => {
     if (err) {
-      res.status(500).send(err);
+      res.status(500).send('Error getting recommended listings\n' + err);
     } else {
       res.status(200).send(result);
     }
@@ -25,7 +25,7 @@ app.get('/:id/RecommendedListings/', (req, res) => {
 app.get('/ListingsByDesc', (req, res) => {
   db.getListingsByDescription(neo4jDriver, req.body.description, (err, data) => {
     if (err) {
-      res.status(500).send();
+      res.status(500).send('Error getting listing by description\n' + err);
     } else {
       res.status(200).send(data);
     }
@@ -58,7 +58,7 @@ app.get('/:id/Listing', (req, res) => {
 app.patch('/Listing/:id', (req, res) => {
   db.updateOneListing(neo4jDriver, req.body, req.params.id, (err, result) => {
     if (err) {
-      res.status(500).send();
+      res.status(500).send('Error updating one listing\n' + err);
     } else {
       res.status(200).send(result);
     }
@@ -69,7 +69,7 @@ app.patch('/Listing/:id', (req, res) => {
 app.delete('/Listing/:id', (req, res) => {
   db.deleteOneListing(neo4jDriver, req.params.id, (err, result) => {
     if (err) {
-      res.status(500).send();
+      res.status(500).send('Error deleting one listing\n' + err);
     } else {
       res.status(200).send(result);
     }
