@@ -41,17 +41,20 @@ const testNeo4j = {
     simple: 'match (l:Listing {id: $id}) return l',
     full: 'match (l:Listing {id: $id})-[:RECOMMENDS]->(n:Listing) return n'
   },
-  getN(n, max, results = []) {
+  callNQueries(n) {
+    
+  },
+  getN(n, max, results = 0) {
     const session = driver.session();
     const readTxPromise = session.readTransaction(tx => tx.run(testNeo4j.queries.full, {'id': Math.ceil(Math.random() * max)}));
     readTxPromise
       .then(result => {
-        results.push(result);
+        results++;
         if (n > 0) {
           session.close();
-          testNeo4j.getN(n - 1, results);
+          testNeo4j.getN(n - 1, max, results);
         } else {
-          console.log(`Read ${results.length} records. Last record:\n ${JSON.stringify(result)}`);
+          console.log(`Read ${results} records. Last record:\n ${JSON.stringify(result)}`);
           driver.close();
         }
       })
