@@ -11,12 +11,12 @@ app.use(bodyParser.json());
 app.use(express.static(`${__dirname}/../public/dist`));
 
 // Get Recommended Listings
-app.get('/RecommendedListings', (req, res) => {
-  db.getRecommendedListings(neo4jDriver, id, (err, data) => {
+app.get('/:id/RecommendedListings/', (req, res) => {
+  db.getRecommendedListings(neo4jDriver, req.params.id, (err, result) => {
     if (err) {
-      res.status(500).send();
+      res.status(500).send(err);
     } else {
-      res.status(200).send(data);
+      res.status(200).send(result);
     }
   });
 });

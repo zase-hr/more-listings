@@ -1,9 +1,12 @@
 const getRecommendedListings = (driver, id, callback) => {
-  const query = 'MATCH (:Listing {id: $id})-[:RECOMMENDS]->(b:Listing) RETURN b';
+  let query = 'MATCH (a:Listing {id: $id})-[:RECOMMENDS]->(b:Listing) RETURN b';
   const session = driver.session();
-  session.query(query, { 'id': id })
+  // const result = session.run(query, { 'id': id });
+  const result = session.run(query, { 'id': 909 });
+  // const result = session.run(query, { 'id': Math.ceil(Math.random() * id) });
+  result
     .then((result) => {
-      callback(null, result);
+      callback(null, result.records);
       session.close();
     })
     .catch((err) => {
