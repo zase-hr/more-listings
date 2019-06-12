@@ -1,18 +1,5 @@
-const sqlite = require('sqlite3');
-// const neo4j = require('neo4j-driver');
-const path = require('path');
+const neo4j = require('neo4j-driver').v1;
 
-// ## SQLite3
+const driver = neo4j.driver("bolt://localhost:7687", neo4j.auth.basic("neo4j", "hodak"));
 
-module.exports.sqlite = new sqlite.Database(path.resolve(__dirname, '../storage/more_listings.db'), (err) => {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log('Connected to SQLite database');
-  }
-});
-
-// ### Neo4j
-
-// const driver = neo4j.driver(uri, neo4j.auth.basic.user(password));
-// const session = driver.session();
+module.exports = driver;

@@ -1,17 +1,20 @@
-const getRandomListings = (connection, callback) => {
-  const query = 'SELECT * FROM listings ORDER BY RAND() LIMIT 12';
-  connection.query(query, (err, result) => {
-    if (err) {
-      callback(err);
-    } else {
+const getRecommendedListings = (driver, id, callback) => {
+  const query = 'MATCH (:Listing {id: $id})-[:RECOMMENDS]->(b:Listing) RETURN b';
+  const session = driver.session();
+  session.query(query, { 'id': id })
+    .then((result) => {
       callback(null, result);
-    }
-  });
+      session.close();
+    })
+    .catch((err) => {
+      callback(err);
+      session.close();
+    });
 };
 
-const getListingsByDescription = (connection, desc, callback) => {
+const getListingsByDescription = (driver, desc, callback) => {
   const query = 'SELECT * FROM listings WHERE ?';
-  connection.query(query, desc, (err, result) => {
+  driver.query(query, desc, (err, result) => {
     if (err) {
       callback(err);
     } else {
@@ -20,9 +23,9 @@ const getListingsByDescription = (connection, desc, callback) => {
   });
 };
 
-const addManyListings = (connection, arr, callback) => {
+const addManyListings = (driver, arr, callback) => {
   const query = 'INSERT INTO listings (img, house_type, location, description, cost_per_night, rating, votes) VALUES ?';
-  connection.query(query, [arr], (err, result) => {
+  driver.query(query, [arr], (err, result) => {
     if (err) {
       callback(err);
     } else {
@@ -31,9 +34,9 @@ const addManyListings = (connection, arr, callback) => {
   });
 };
 
-const addOneListing = (connection, fields, callback) => {
+const addOneListing = (driver, fields, callback) => {
   const query = 'INSERT INTO listings (img, house_type, location, description, cost_per_night, rating, votes) VALUES (?)';
-  connection.query(query, fields, (err, result) => {
+  driver.query(query, fields, (err, result) => {
     if (err) {
       callback(err);
     } else {
@@ -42,9 +45,9 @@ const addOneListing = (connection, fields, callback) => {
   });
 };
 
-const updateOneListing = (connection, data, id, callback) => {
+const updateOneListing = (driver, data, id, callback) => {
   const query = `UPDATE listings SET ? WHERE id = ${id}`;
-  connection.query(query, data, (err, result) => {
+  driver.query(query, data, (err, result) => {
     if (err) {
       callback(err);
     } else {
@@ -79,7 +82,7 @@ module.exports = {
   addManyListings,
   addOneListing,
   updateOneListing,
-  getRandomListings,
+  getRecommendedListings,
   getOneListing,
   getListingsByDescription,
   deleteOneListing,
