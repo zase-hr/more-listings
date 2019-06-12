@@ -39,22 +39,28 @@ const testSQLite = {
 const testNeo4j = {
   queries: {
     simple: 'match (l:Listing {id: $id}) return l',
-    full: (id) => `match (l:Listing {id: $id)-[:RECOMMENDS]->(n:Listing) return n`,
-    fullParam: 'match (l:Listing {id: $id})-[:RECOMMENDS]->(n:Listing) return n'
+    full: 'match (l:Listing {id: $id})-[:RECOMMENDS]->(n:Listing) return n'
   },
-  getN(n, max) {
+  getN(n, max, results = []) {
     const session = driver.session();
-    const readTxPromise = session.readTransaction(tx => tx.run(testNeo4j.queries.simple, {'id': 5}));
-    readTxPromise.then(result => {
-      session.close();
-      if (result) {
-        console.log(result);
-      }
-    })
-    .catch(err => {
-      console.log('Transaction error: ' + err);
-    });
+    const readTxPromise = session.readTransaction(tx => tx.run(testNeo4j.queries.full, {'id': Math.ceil(Math.random() * max)}));
+    readTxPromise
+      .then(result => {
+        results.push(result);
+        if (n > 0) {
+          session.close();
+          testNeo4j.getN(n - 1, results);
+        } else {
+          console.log(`Read ${results.length} records. Last record:\n ${JSON.stringify(result)}`);
+          driver.close();
+        }
+      })
+      .catch(err => {
+        console.log('Transaction error: ' + err);
+        session.close();
+        driver.close();
+      });
   }
 }
 
-testNeo4j.getN(1, 1e7);
+testNeo4j.getN(1000, 1e7);
