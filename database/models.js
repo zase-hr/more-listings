@@ -15,15 +15,22 @@ const getRecommendedListings = (driver, id, callback) => {
     });
 };
 
+// TODO: Re-seed listings with proper description / location
+//      For now... maybe just ask with location...
 const getListingsByDescription = (driver, desc, callback) => {
-  const query = 'SELECT * FROM listings WHERE ?';
-  driver.query(query, desc, (err, result) => {
-    if (err) {
+  const query = 'MATCH (a:Listing { location: "Cozy house in friendly neighborhood" }) RETURN a LIMIT 25';
+  const session = driver.session();
+  // const result = session.run(query, { location: desc });
+  const result = session.run(query);
+  result
+    .then((result) => {
+      callback(null, result.records);
+      session.close();
+    })
+    .catch((err) => {
       callback(err);
-    } else {
-      callback(null, result);
-    }
-  });
+      session.close();
+    });
 };
 
 const addManyListings = (driver, arr, callback) => {

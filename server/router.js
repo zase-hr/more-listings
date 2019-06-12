@@ -23,7 +23,7 @@ app.get('/:id/RecommendedListings/', (req, res) => {
 
 // Get Listings by Description
 app.get('/ListingsByDesc', (req, res) => {
-  db.getListingsByDescription(neo4jDriver, req.body, (err, data) => {
+  db.getListingsByDescription(neo4jDriver, req.body.description, (err, data) => {
     if (err) {
       res.status(500).send();
     } else {
