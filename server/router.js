@@ -36,7 +36,7 @@ app.get('/ListingsByDesc', (req, res) => {
 app.post('/Listing', (req, res) => {
   db.addOneListing(neo4jDriver, req.body, (err, result) => {
     if (err) {
-      res.status(500).send(err);
+      res.status(500).send('Error posting one listing\n' + err);
     } else {
       res.status(200).send(result);
     }
@@ -44,10 +44,10 @@ app.post('/Listing', (req, res) => {
 });
 
 // Get One Listing
-app.get('/Listing/:id', (req, res) => {
+app.get('/:id/Listing', (req, res) => {
   db.getOneListing(neo4jDriver, req.params.id, (err, result) => {
     if (err) {
-      res.status(500).send();
+      res.status(500).send('Error getting one listing\n' + err);
     } else {
       res.status(200).send(result);
     }

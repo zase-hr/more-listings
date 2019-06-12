@@ -1,5 +1,5 @@
 const getRecommendedListings = (driver, id, callback) => {
-  let query = 'MATCH (a:Listing {id: $id})-[:RECOMMENDS]->(b:Listing) RETURN b';
+  let query = `MATCH (a:Listing {id: ${id}})-[:RECOMMENDS]->(b:Listing) RETURN b`;
   const session = driver.session();
   // const result = session.run(query, { 'id': id });
   const result = session.run(query, { 'id': 909 });
@@ -18,7 +18,7 @@ const getRecommendedListings = (driver, id, callback) => {
 // TODO: Re-seed listings with proper description / location
 //      For now... maybe just ask with location...
 const getListingsByDescription = (driver, desc, callback) => {
-  const query = 'MATCH (a:Listing { location: "Cozy house in friendly neighborhood" }) RETURN a LIMIT 25';
+  const query = `MATCH (a:Listing { location: ${desc}}) RETURN a LIMIT 25`;
   const session = driver.session();
   // const result = session.run(query, { location: desc });
   const result = session.run(query);
@@ -45,14 +45,18 @@ const addManyListings = (driver, arr, callback) => {
 };
 
 const addOneListing = (driver, fields, callback) => {
-  const query = 'INSERT INTO listings (img, house_type, location, description, cost_per_night, rating, votes) VALUES (?)';
-  driver.query(query, fields, (err, result) => {
-    if (err) {
+  const query = 'CREATE (l:Listing { user_profile: $user, house_type: $type, location: $location, description: $description, cost_per_night: $cost, rating: $rating, votes: $votes, photo: $photo }) RETURN l';
+  const session = driver.session();
+  const result = session.run(query, fields);
+  result
+    .then(data => {
+      callback(null, data);
+      session.close();
+    })
+    .catch(err => {
       callback(err);
-    } else {
-      callback(null, result);
-    }
-  });
+      session.close();
+    });
 };
 
 const updateOneListing = (driver, data, id, callback) => {
@@ -61,25 +65,29 @@ const updateOneListing = (driver, data, id, callback) => {
     if (err) {
       callback(err);
     } else {
-      callback(null, result);
+      callback(null, result.records);
     }
   });
 };
 
-const getOneListing = (connection, id, callback) => {
-  const query = 'SELECT * FROM listings WHERE id = ?';
-  connection.query(query, id, (err, result) => {
-    if (err) {
+const getOneListing = (driver, id, callback) => {
+  let query = `MATCH (l:Listing {id: ${id}}) RETURN l`;
+  let session = driver.session();
+  let result = session.run(query);
+  result
+    .then(data => {
+      callback(null, data.records[0]._fields[0].properties);
+      session.close();
+    })
+    .catch(err => {
       callback(err);
-    } else {
-      callback(null, result);
-    }
-  });
+      session.close();
+    });
 };
 
-const deleteOneListing = (connection, id, callback) => {
+const deleteOneListing = (session, id, callback) => {
   const query = 'DELETE FROM listings WHERE id = ?';
-  connection.query(query, id, (err, result) => {
+  session.query(query, id, (err, result) => {
     if (err) {
       callback(err);
     } else {
