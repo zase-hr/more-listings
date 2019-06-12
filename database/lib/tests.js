@@ -1,4 +1,4 @@
-// const db = require('./connect');
+// const db = require('../connect');
 const neo4j = require('neo4j-driver').v1;
 const driver = neo4j.driver("bolt://localhost:7687", neo4j.auth.basic("neo4j", "hodak"));
 
@@ -67,27 +67,33 @@ const testNeo4j = {
       console.log('Neo4j Transaction Error: ' + err);
     });
   },
-  getNWithTransaction(n, max) {
-    const queries = [];
-    for (let i = 0; i < n; i++) {
-      queries.push(testNeo4j.queries.full(Math.ceil(Math.random() * max)));
+  getNWithTransactions(n, max) {
+    console.log(`Testing ${n} Neo4j queries\n`);
+    const start = Date.now();
+    let queries = [];
+    for (let k = 0; k < n / 10; k++) {
+      queries = [];
+      for (let i = 0; i < Math.ceil(n / 10); i++) {
+        queries.push(testNeo4j.queries.full(Math.ceil(Math.random() * max)));
+      }
+      testNeo4j.callTransaction(queries, () => {
+        console.log('transaction complete');
+        console.log(k);
+        if (k === (n / 10) - 1) {
+          console.log(`Completed ${n} Neo4j queries in ${((Date.now() - start) / 1000)} seconds`);
+        }
+      });
     }
-    testNeo4j.callTransaction(queries);
   },
-  callTransaction(queries) {
+  callTransaction(queries, callback) {
     const session = driver.session();
     const transaction = session.beginTransaction();
-    const results = [];
-    console.log(`Testing ${queries.length} Neo4j queries\n`);
-    const start = Date.now();
     for (let i = 0; i < queries.length; i++) {
       transaction
         .run(queries[i])
         .then(result => {
-          results.push(result);
           if (i === queries.length - 1) {
-            console.log(`Found ${results.length} results in ${((Date.now() - start) / 1000)} seconds`);
-            console.log('Last result: ' + JSON.stringify(result));
+            callback();
             transaction.commit();
             session.close();
             driver.close();
@@ -95,6 +101,7 @@ const testNeo4j = {
         })
         .catch(err => {
           console.log('Neo4j Transaction Error:' + err);
+          transaction.commit();
           session.close();
           driver.close();
         });
@@ -102,4 +109,4 @@ const testNeo4j = {
   }
 }
 
-testNeo4j.getNWithTransaction(1000, 1e7);
+testNeo4j.getNWithTransactions(50, 1e7);
