@@ -34,15 +34,12 @@ const testSQLite = {
   }
 }
 
-// testSQLite.getN(1000);
+// testSQLite.getN(10000);
 
 const testNeo4j = {
   queries: {
     simple: 'match (l:Listing {id: $id}) return l',
     full: 'match (l:Listing {id: $id})-[:RECOMMENDS]->(n:Listing) return n'
-  },
-  callNQueries(n) {
-    
   },
   getN(n, max, results = 0) {
     const session = driver.session();
