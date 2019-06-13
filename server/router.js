@@ -1,3 +1,4 @@
+require('newrelic');
 const compression = require('compression');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -11,7 +12,7 @@ app.use(bodyParser.json());
 app.use(express.static(`${__dirname}/../public/dist`));
 
 // Get Recommended Listings
-app.get('/:id/RecommendedListings/', (req, res) => {
+app.get('/:id/RecommendedListings', (req, res) => {
   db.getRecommendedListings(neo4jDriver, req.params.id, (err, result) => {
     if (err) {
       res.status(500).send('Error getting recommended listings\n' + err);
