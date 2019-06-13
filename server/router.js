@@ -1,5 +1,5 @@
 require('newrelic');
-const compression = require('compression');
+// const compression = require('compression');
 const express = require('express');
 const bodyParser = require('body-parser');
 const neo4jDriver = require('../database/connect');
@@ -7,7 +7,7 @@ const db = require('../database/models.js');
 
 const app = express();
 
-app.use(compression());
+// app.use(compression());
 app.use(bodyParser.json());
 app.use(express.static(`${__dirname}/../public/dist`));
 
