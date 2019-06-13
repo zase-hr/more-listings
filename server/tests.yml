@@ -1,0 +1,11 @@
+config:
+  target: 'http://localhost:3005'
+  phases:
+    - duration: 10
+      arrivalRate: 1
+  processor: "./artilleryFunctions.js"
+scenarios:
+  - flow:
+    - get:
+        url: "/{{ id }}/RecommendedListings"
+        beforeRequest: "randomId"
