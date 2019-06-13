@@ -43,3 +43,5 @@ database/storage
 
 package-lock.json
 .DS_Store
+
+newrelic.js
