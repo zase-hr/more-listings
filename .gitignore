@@ -37,6 +37,11 @@ bower_components/
 .flooignore
 
 
-db/config.js
+database/config.js
+database/imageUrls.js
+database/storage
+
 package-lock.json
 .DS_Store
+
+newrelic.js
