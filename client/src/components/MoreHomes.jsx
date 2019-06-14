@@ -25,13 +25,14 @@ class MoreHomes extends React.Component {
   componentDidMount(e) {
     window.addEventListener("resize", this.handleResize);
     const id = window.location.href.split('/')[3];
-    axios.get(`/${id}/RecommendedListings`)
-      .then((response) => {
-        this.setState({ data: response.data })
-      })
-      .catch((error) => {
-        console.log(error)
-      });
+    // axios.get(`/${id}/RecommendedListings`)
+    //   .then((response) => {
+    //     this.setState({ data: response.data })
+    //   })
+    //   .catch((error) => {
+    //     console.log(error)
+    //   });
+    
   }
 
   componentWillUnmount() {

@@ -28,6 +28,7 @@
     "react": "^16.8.6",
     "react-dev": "0.0.1",
     "react-dom": "^16.8.6",
+    "request": "^2.88.0",
     "sqlite3": "^4.0.8"
   },
   "devDependencies": {
