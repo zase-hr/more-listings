@@ -4,7 +4,8 @@
   "description": "Additional listings for interested houseguests",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server/server.js",
+    "start": "node server/server.js",
+    "server-dev": "nodemon server/server.js",
     "react-dev": "webpack -d --watch",
     "test": "jest --detectOpenHandles --coverage",
     "seed": "node database/seed.js",

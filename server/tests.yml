@@ -1,11 +1,22 @@
 config:
   target: 'http://localhost:3005'
   phases:
-    - duration: 10
-      arrivalRate: 1
+    - duration: 20
+      arrivalRate: 0
+      rampTo: 30
+      name: "Warm up the application"
+    - duration: 60
+      arrivalRate: 30
+      name: "Sustained max load"
+    - pause: 20
+      name: "Cool down"
   processor: "./artilleryFunctions.js"
 scenarios:
   - flow:
-    - get:
-        url: "/{{ id }}/RecommendedListings"
-        beforeRequest: "randomId"
+    # User is triggering requests for Rec Li. would be getting whole pages irl
+    - loop:
+      - get:
+          url: "/{{ id }}/RecommendedListings"
+          beforeRequest: "randomId"
+      - think: 2
+      count: 3
