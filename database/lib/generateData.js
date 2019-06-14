@@ -10,15 +10,16 @@ const path = require('path');
 const faker = require('faker');
 const images = require('../imageURLs');
 const writer = require('./writer');
+const writerWithID = require('./writerWithID');
 
 const houseType = ['ENTIRE HOUSE', 'ENTIRE APARTMENT', 'PRIVATE ROOM', 'SHARED ROOM'];
 const cities = ['San Francisco', 'New York City', 'Dallas', 'Nashville', 'Denver', 'Kansas City', 'Boston'];
 const description = ['Cozy house in friendly neighborhood', 'Spacious apartment', 'Sunny, Modern room', 'Penthouse Studio', 'Perfect Weekender'];
 
 //  Data for the listing table
-const listingHeader = 'user_profile,house_type,location,description,cost_per_night,rating,votes';
+const listingHeader = 'user_profile,house_type,location,description,cost_per_night,rating,votes,photo';
 function createListingData(totalUsers) {
-  return `${Math.ceil(Math.random() * totalUsers)},"${houseType[Math.floor(Math.random() * houseType.length)]}","${cities[Math.floor(Math.random() * cities.length)]}","${description[Math.floor(Math.random() * description.length)]}",${35 + (Math.ceil(Math.random() * 7465))},${(Math.random() * (5 - 0) + 0).toFixed(2)},${Math.floor(Math.random() * 3500)}`
+  return `${Math.ceil(Math.random() * totalUsers)},"${houseType[Math.floor(Math.random() * houseType.length)]}","${cities[Math.floor(Math.random() * cities.length)]}","${description[Math.floor(Math.random() * description.length)]}",${35 + (Math.ceil(Math.random() * 7465))},${(Math.random() * (5 - 0) + 0).toFixed(2)},${Math.floor(Math.random() * 3500)},"${images.getImg()}"`
 }
 
 //  Data for the listing relations table
@@ -39,12 +40,6 @@ function createRelationData(index, totalListings) {
   return relations;
 }
 
-//  Data for the photos table
-const photoHeader = 'photo_url, listing';
-function createPhotoData(totalListings) {
-  return `"${images.getImg()}",${Math.ceil(Math.random() * totalListings)}`;
-}
-
 //  Data for the Users table
 const userHeader = 'firstname,lastname,email';
 function createUserData() {
@@ -58,26 +53,40 @@ function createReportData(totalUsers, totalListings) {
 }
 
 //  Paths to data storage (no extension)
-const listingPath = path.resolve(__dirname, '../storage/listing_table');
-const relationPath = path.resolve(__dirname, '../storage/listing_relation_table');
-const photoPath = path.resolve(__dirname, '../storage/photo_table');
-const userPath = path.resolve(__dirname, '../storage/user_profile_table');
-const reportPath = path.resolve(__dirname, '../storage/report_table');
-
+const fullPaths = {
+  listing: path.resolve(__dirname, '../storage/listing_table'),
+  relation: path.resolve(__dirname, '../storage/listing_relation_table'),
+  user: path.resolve(__dirname, '../storage/user_profile_table'),
+  report: path.resolve(__dirname, '../storage/report_table')
+}
+const miniPaths = {
+  listing: path.resolve(__dirname, '../storage/mini_listing_table'),
+  relation: path.resolve(__dirname, '../storage/mini_listing_relation_table'),
+  user: path.resolve(__dirname, '../storage/mini_user_profile_table'),
+  report: path.resolve(__dirname, '../storage/mini_report_table')
+}
+const pathWithID = {
+  listing: path.resolve(__dirname, '../storage/neo4j/listing_withID_table'),
+}
 // Write all data
 
 //  'primary' should be equal to the primary record total
-module.exports.generate = function(primary = 1e3, moreCommon = 5e3, lessCommon = 1e2) {
-  // writer.csv(primary, () => createListingData(moreCommon), listingPath);
-  // writer.csv(primary, (index) => createRelationData(index, primary), relationPath);
-
-  writer.csv(moreCommon, () => createPhotoData(primary), photoPath);
-  writer.csv(moreCommon, createUserData, userPath);
-  // writer.sql(moreCommon, () => createPhotoData(primary), photoPath, 'photo');
-  // writer.sql(moreCommon, createUserData, userPath, 'user_profile');
-
-  // writer.csv(lessCommon, () => createReportData(primary, moreCommon), reportPath);
+module.exports.generateMini = function(primary = 1e3, moreCommon = 5e3, lessCommon = 1e2) {
+  writer.csv(primary, () => createListingData(moreCommon), miniPaths.listing);
+  // writer.csv(primary, (index) => createRelationData(index, primary), miniPaths.relation);
+  // writer.csv(moreCommon, createUserData, miniPaths.user);
+  // writer.sql(moreCommon, createUserData, miniPaths.user, 'user_profile');
+  // writer.csv(lessCommon, () => createReportData(primary, moreCommon), miniPaths.report);
 };
 
-// module.exports.generate();
-module.exports.generate(1e7, 5e7, 1e5);
+module.exports.generateFull = function(primary = 1e7, moreCommon = 5e7, lessCommon = 1e5) {
+  // writer.csv(primary, () => createListingData(moreCommon), fullPaths.listing);
+  writerWithID.csv(primary, () => createListingData(moreCommon), pathWithID.listing);
+  // writer.csv(primary, (index) => createRelationData(index, primary), fullPaths.relation);
+  // writer.csv(moreCommon, createUserData, fullPaths.user);
+  // writer.sql(moreCommon, createUserData, fullPaths.user, 'user_profile');
+  // writer.csv(lessCommon, () => createReportData(primary, moreCommon), fullPaths.report);
+};
+
+// module.exports.generateMini();
+module.exports.generateFull();

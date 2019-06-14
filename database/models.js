@@ -1,28 +1,39 @@
-const getRandomListings = (connection, callback) => {
-  const query = 'SELECT * FROM listings ORDER BY RAND() LIMIT 12';
-  connection.query(query, (err, result) => {
-    if (err) {
+const getRecommendedListings = (driver, id, callback) => {
+  let query = `MATCH (a:Listing {id: ${id}})-[:RECOMMENDS]->(b:Listing) RETURN b`;
+  const session = driver.session();
+  const result = session.run(query);
+  result
+    .then((result) => {
+      callback(null, result.records);
+      session.close();
+    })
+    .catch((err) => {
       callback(err);
-    } else {
-      callback(null, result);
-    }
-  });
+      session.close();
+    });
 };
 
-const getListingsByDescription = (connection, desc, callback) => {
-  const query = 'SELECT * FROM listings WHERE ?';
-  connection.query(query, desc, (err, result) => {
-    if (err) {
+// TODO: Re-seed listings with proper description / location
+//      For now... maybe just ask with location...
+const getListingsByDescription = (driver, desc, callback) => {
+  const query = `MATCH (a:Listing { location: ${desc}}) RETURN a LIMIT 25`;
+  const session = driver.session();
+  // const result = session.run(query, { location: desc });
+  const result = session.run(query);
+  result
+    .then((result) => {
+      callback(null, result.records);
+      session.close();
+    })
+    .catch((err) => {
       callback(err);
-    } else {
-      callback(null, result);
-    }
-  });
+      session.close();
+    });
 };
 
-const addManyListings = (connection, arr, callback) => {
+const addManyListings = (driver, arr, callback) => {
   const query = 'INSERT INTO listings (img, house_type, location, description, cost_per_night, rating, votes) VALUES ?';
-  connection.query(query, [arr], (err, result) => {
+  driver.query(query, [arr], (err, result) => {
     if (err) {
       callback(err);
     } else {
@@ -31,42 +42,50 @@ const addManyListings = (connection, arr, callback) => {
   });
 };
 
-const addOneListing = (connection, fields, callback) => {
-  const query = 'INSERT INTO listings (img, house_type, location, description, cost_per_night, rating, votes) VALUES (?)';
-  connection.query(query, fields, (err, result) => {
-    if (err) {
+const addOneListing = (driver, fields, callback) => {
+  const query = 'CREATE (l:Listing { user_profile: $user, house_type: $type, location: $location, description: $description, cost_per_night: $cost, rating: $rating, votes: $votes, photo: $photo }) RETURN l';
+  const session = driver.session();
+  const result = session.run(query, fields);
+  result
+    .then(data => {
+      callback(null, data);
+      session.close();
+    })
+    .catch(err => {
       callback(err);
-    } else {
-      callback(null, result);
-    }
-  });
+      session.close();
+    });
 };
 
-const updateOneListing = (connection, data, id, callback) => {
+const updateOneListing = (driver, data, id, callback) => {
   const query = `UPDATE listings SET ? WHERE id = ${id}`;
-  connection.query(query, data, (err, result) => {
+  driver.query(query, data, (err, result) => {
     if (err) {
       callback(err);
     } else {
-      callback(null, result);
+      callback(null, result.records);
     }
   });
 };
 
-const getOneListing = (connection, id, callback) => {
-  const query = 'SELECT * FROM listings WHERE id = ?';
-  connection.query(query, id, (err, result) => {
-    if (err) {
+const getOneListing = (driver, id, callback) => {
+  let query = `MATCH (l:Listing {id: ${id}}) RETURN l`;
+  let session = driver.session();
+  let result = session.run(query);
+  result
+    .then(data => {
+      callback(null, data.records[0]._fields[0].properties);
+      session.close();
+    })
+    .catch(err => {
       callback(err);
-    } else {
-      callback(null, result);
-    }
-  });
+      session.close();
+    });
 };
 
-const deleteOneListing = (connection, id, callback) => {
+const deleteOneListing = (session, id, callback) => {
   const query = 'DELETE FROM listings WHERE id = ?';
-  connection.query(query, id, (err, result) => {
+  session.query(query, id, (err, result) => {
     if (err) {
       callback(err);
     } else {
@@ -79,7 +98,7 @@ module.exports = {
   addManyListings,
   addOneListing,
   updateOneListing,
-  getRandomListings,
+  getRecommendedListings,
   getOneListing,
   getListingsByDescription,
   deleteOneListing,
