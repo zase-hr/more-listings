@@ -28,6 +28,7 @@ class MoreHomes extends React.Component {
     const params = new URLSearchParams(search);
     axios.get(`/MoreHomes?id=${params.get('id')}`)
       .then((response) => {
+        console.log(response.data.results);
         const rows = response.data.results[0].data.map(data => {
           let { row } = data
           return row[0];

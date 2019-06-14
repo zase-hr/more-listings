@@ -1,4 +1,4 @@
-const driver = require('./connect');
+// const driver = require('./connect');
 const request = require('request')
 
 const getRecommendedListings = (req, res) => {
