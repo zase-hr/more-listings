@@ -3,10 +3,10 @@ config:
   phases:
     - duration: 10
       arrivalRate: 0
-      rampTo: 1
+      rampTo: 30
       name: "Warm up the application"
     - duration: 30
-      arrivalRate: 1
+      arrivalRate: 30
       name: "Sustained max load"
     # - pause: 10
     #   name: "Cool down"
