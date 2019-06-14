@@ -1,7 +1,8 @@
 const { app } = require('./router.js');
 const neo4jDriver = require('../database/connect.js');
+const PORT = 3005;
 
-const instance = app.listen(3005, () => console.log('Listening on port: 3005'));
+const instance = app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
 
 app.delete('/instance/:code', (req, res) => {
   if (req.params.code === 'badpassword') {

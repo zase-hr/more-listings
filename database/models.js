@@ -1,16 +1,18 @@
-const getRecommendedListings = (driver, id, callback) => {
-  let query = `MATCH (a:Listing {id: ${id}})-[:RECOMMENDS]->(b:Listing) RETURN b`;
+const driver = require('./connect');
+
+const getRecommendedListings = (req, res) => {
+  let query = `MATCH (a:Listing {id: ${req.params.id}})-[:RECOMMENDS]->(b:Listing) RETURN b`;
   const session = driver.session();
-  const result = session.run(query);
-  result
+  session.run(query)
     .then((result) => {
-      callback(null, result.records);
       session.close();
+      res.status(200).send(result.records);
     })
     .catch((err) => {
-      callback(err);
       session.close();
+      res.status(500).send(err);
     });
+    
 };
 
 module.exports = {

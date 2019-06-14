@@ -8,15 +8,15 @@ config:
     - duration: 60
       arrivalRate: 30
       name: "Sustained max load"
-    # - pause: 10
-    #   name: "Cool down"
+    - pause: 10
+      name: "Cool down"
   processor: "./artilleryFunctions.js"
 scenarios:
   - flow:
     # User is triggering requests for Rec Li. would be getting whole pages irl
-    # - loop:
-    - get:
-        url: "/{{ id }}/RecommendedListings"
-        beforeRequest: "randomId"
-      # - think: 2
-      # count: 3
+    - loop:
+      - get:
+          url: "/{{ id }}/RecommendedListings"
+          beforeRequest: "randomId"
+      - think: 2
+      count: 3

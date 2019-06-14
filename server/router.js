@@ -1,26 +1,23 @@
 require('../node_modules/newrelic/index');
-// const compression = require('compression');
 const express = require('express');
-const bodyParser = require('body-parser');
-const neo4jDriver = require('../database/connect');
+const path = require('path');
 const db = require('../database/models.js');
 
 const app = express();
 
-// app.use(compression());
-app.use(bodyParser.json());
 app.use(express.static(`${__dirname}/../public/dist`));
 
-// Get Recommended Listings
-app.get('/:id/RecommendedListings', (req, res) => {
-  db.getRecommendedListings(neo4jDriver, req.params.id, (err, result) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.status(200).send(result);
-    }
-  });
+app.get('/:id', (req, res) => {
+  if (!req.params.id) {
+    res.status(400);
+    res.end();
+  } else {
+    res.sendFile('index.html', { root: path.resolve(__dirname, '../public/dist') });
+  }
 });
+
+// Get Recommended Listings
+app.get('/:id/RecommendedListings', db.getRecommendedListings);
 
 module.exports = {
   app
