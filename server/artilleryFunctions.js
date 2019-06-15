@@ -1,8 +1,13 @@
-module.exports = {
-  randomId
+function setBody(requestParams, context, events, next) {
+  // context.vars['id'] = Math.ceil(Math.random() * 9999999);
+  requestParams = {
+    statements : [ {
+      statement: `MATCH (a:Listing {id: ${Math.ceil(Math.random() * 9999999)}})-[:RECOMMENDS]->(b:Listing) RETURN b`
+    } ]
+  }
+  return next();
 };
 
-function randomId(requestParams, context, events, done) {
-  context.vars['id'] = Math.ceil(Math.random() * 9999999);
-  return done();
-}
+module.exports = {
+  setBody
+};
