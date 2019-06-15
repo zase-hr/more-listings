@@ -2,7 +2,9 @@
 const request = require('request')
 
 const getRecommendedListings = (req, res) => {
-  // let query = `MATCH (a:Listing {id: ${req.params.id}})-[:RECOMMENDS]->(b:Listing) RETURN b`;
+  
+  // ## Bolt Protocol Version
+  // let query = `MATCH (a:Listing {id: ${req.query.id}})-[:RECOMMENDS]->(b:Listing) RETURN b`;
   // const session = driver.session();
   // session.run(query)
   //   .then((result) => {
@@ -13,6 +15,8 @@ const getRecommendedListings = (req, res) => {
   //     session.close();
   //     res.status(500).send(err);
   //   });
+
+  // ## HTTP Version
   request({
     uri: 'http://localhost:7474/db/data/transaction/commit',
     headers: {
