@@ -26,45 +26,47 @@ class MoreHomes extends React.Component {
     window.addEventListener("resize", this.handleResize);
     const search = window.location.search;
     const params = new URLSearchParams(search);
-    // axios.get(`/MoreHomes?id=${params.get('id')}`)
-    //   .then((response) => {
-    //     console.log(response.data.results);
-    //     const rows = response.data.results[0].data.map(data => {
-    //       let { row } = data
-    //       return row[0];
-    //     });
-    //     this.setState({ data: rows })
-    //   })
-    //   .catch((error) => {
-    //     console.log(error)
-    //   });
-    fetch('http://localhost:7474/db/data/transaction/commit', {
-      headers: {
-        "Accept": "application/json; charset=UTF-8",
-        "Content-Type": "application/json",
-        "Authorization": "Basic bmVvNGo6aG9kYWs="
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        statements : [ {
-          statement: `MATCH (a:Listing {id: ${params.get('id')}})-[:RECOMMENDS]->(b:Listing) RETURN b`    
-        } ]
-      })
-    })
+    axios.get(`/MoreHomes?id=${params.get('id')}`)
       .then((response) => {
-        return response.json();
+        console.log(response.data.results);
+        const rows = response.data.results[0].data.map(data => {
+          let { row } = data
+          return row[0];
+        });
+        this.setState({ data: rows })
       })
-      .then(json => {
-        console.log(json);
-        const rows = json.results[0].data.map(data => {
-            let { row } = data
-            return row[0];
-          });
-        this.setState({ data: rows });
-      })
-      .catch(err => {
-        console.log('Error retrieving data: ' + err);
+      .catch((error) => {
+        console.log(error)
       });
+
+    // ## This would be beautiful if the security risk could be eliminated
+    // fetch('http://localhost:7474/db/data/transaction/commit', {
+    //   headers: {
+    //     "Accept": "application/json; charset=UTF-8",
+    //     "Content-Type": "application/json",
+    //     "Authorization": "Basic bmVvNGo6aG9kYWs="
+    //   },
+    //   method: 'POST',
+    //   body: JSON.stringify({
+    //     statements : [ {
+    //       statement: `MATCH (a:Listing {id: ${params.get('id')}})-[:RECOMMENDS]->(b:Listing) RETURN b`    
+    //     } ]
+    //   })
+    // })
+    //   .then((response) => {
+    //     return response.json();
+    //   })
+    //   .then(json => {
+    //     console.log(json);
+    //     const rows = json.results[0].data.map(data => {
+    //         let { row } = data
+    //         return row[0];
+    //       });
+    //     this.setState({ data: rows });
+    //   })
+    //   .catch(err => {
+    //     console.log('Error retrieving data: ' + err);
+    //   });
   }
 
   componentWillUnmount() {
