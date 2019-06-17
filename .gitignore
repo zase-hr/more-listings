@@ -44,4 +44,5 @@ database/storage
 package-lock.json
 .DS_Store
 
+loaderio/loaderio.txt
 newrelic.js
